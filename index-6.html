@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MAVRO — kiyim-kechak e'lonlari</title>
+<style>
+:root{--bg:#f6f7fb;--c:#fff;--t:#0b1220;--m:#6b7280;--a:#3d5afe;--b:#e4e7ee;--r:18px}
+[data-theme=dark]{--bg:#0a101c;--c:#121b2d;--t:#f1f5f9;--m:#94a3b8;--b:#1f2b44}
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--t);padding-bottom:110px;line-height:1.4}
+header{position:sticky;top:0;z-index:20;background:var(--c);border-bottom:1px solid var(--b);padding:10px 16px;display:flex;gap:10px;align-items:center}
+.logo{font:800 22px Georgia,serif;letter-spacing:.28em;cursor:pointer}
+input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--b);background:var(--bg);color:var(--t);font:inherit;margin-bottom:10px}
+header input{margin:0;flex:1;min-width:0}
+.ib{border:1px solid var(--b);background:var(--bg);color:var(--t);border-radius:12px;width:42px;height:42px;font-size:18px;cursor:pointer;flex:none}
+main{max-width:1100px;margin:auto;padding:16px}
+h2{font-size:26px;margin:14px 0}h3{margin:18px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}}
+.card{background:var(--c);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;cursor:pointer}
+.im{position:relative;aspect-ratio:3/4;background:#9ca3af}.im img{width:100%;height:100%;object-fit:cover;display:block}
+.bd{position:absolute;top:8px;left:8px;background:var(--a);color:#fff;padding:5px 11px;border-radius:99px;font-weight:700;font-size:13px;z-index:2}
+.hb{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:10px;border:0;background:#0006;color:#fff;font-size:16px;cursor:pointer}
+.cb{padding:12px}.cb small{color:var(--m);text-transform:uppercase;font-size:12px}
+.pr{color:var(--a);font-weight:800;font-size:18px}.old{text-decoration:line-through;color:var(--m);font-size:13px}.left{color:#b45309;font-size:13px}
+.btn{background:var(--a);color:#fff;border:0;border-radius:12px;padding:11px 16px;font-weight:600;cursor:pointer;font-size:15px;font-family:inherit}
+.btn.g{background:var(--b);color:var(--t)}.btn.r{background:#dc2626}.btn.w{width:100%}
+.hero{background:linear-gradient(135deg,#0b1220,#16224a);color:#fff;border-radius:24px;padding:34px 24px;margin-bottom:16px}
+.hero h1{font:800 44px Georgia,serif;letter-spacing:.22em;margin:6px 0}.hero p{opacity:.8;margin-bottom:16px;max-width:460px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}.chips button{white-space:nowrap;border:1px solid var(--b);background:var(--c);color:var(--t);border-radius:99px;padding:8px 14px;cursor:pointer}
+.chips button.on{background:var(--a);color:#fff;border-color:var(--a)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.tile{position:relative;overflow:hidden;background:linear-gradient(135deg,#0b1220,#131d3a);color:#fff;border-radius:24px;height:130px;display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer}
+.tile:after{content:"";position:absolute;right:-50px;top:-40px;width:160px;height:160px;border-radius:50%;background:#1a2650}.tile span{position:relative;z-index:1}
+nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:min(94vw,560px);background:var(--c);border:1px solid var(--b);border-radius:99px;display:flex;box-shadow:0 8px 30px #0003;z-index:30;padding:6px}
+nav button{flex:1;border:0;background:none;color:var(--m);font-size:11px;padding:6px 2px;cursor:pointer;font-family:inherit}nav button b{display:block;font-size:20px;font-weight:400}nav .on{color:var(--a);font-weight:700}
+.note{background:var(--c);border:1px solid var(--b);border-radius:14px;padding:12px;margin-bottom:12px}
+.pay{background:#eef2ff;color:#1e1b4b;border:1px dashed var(--a);border-radius:14px;padding:14px;margin-bottom:12px}
+.pay .cn{font:700 22px monospace;margin:6px 0;word-break:break-all}
+.prev{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.prev img{width:80px;height:80px;object-fit:cover;border-radius:10px}
+label.f{display:block;font-size:14px;color:var(--m);margin-bottom:4px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.pf{display:flex;gap:16px;align-items:center}.av{position:relative;cursor:pointer;text-align:center;font-size:11px;color:var(--a)}.av img{width:90px;height:90px;border-radius:50%;object-fit:cover;display:block}
+.my,.ar,.ir{background:var(--c);border:1px solid var(--b);border-radius:14px;padding:10px;margin-bottom:10px}
+.my{display:flex;gap:10px;align-items:center}.th{width:60px;height:60px;border-radius:10px;object-fit:cover}
+.ir{cursor:pointer;display:flex;flex-direction:column}.ir small,.ir span{color:var(--m)}
+.rec{max-width:100%;max-height:300px;border-radius:10px;margin:8px 0}
+.st{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--b)}
+.empty{color:var(--m);padding:20px 0;text-align:center}
+#m{position:fixed;inset:0;background:#000a;display:none;z-index:50;align-items:center;justify-content:center}#m.on{display:flex}
+.box{background:var(--c);width:min(94vw,520px);max-height:90vh;overflow:auto;border-radius:22px;padding:16px;position:relative}
+.x{position:sticky;top:0;float:right;z-index:5}
+.gal{position:relative;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:16px;gap:6px}.gal img{width:100%;flex:none;scroll-snap-align:center;aspect-ratio:1;object-fit:cover}
+.gw{position:relative}.shop{display:flex;gap:12px;align-items:center;margin:12px 0}.shop img{width:56px;height:56px;border-radius:50%;object-fit:cover}
+#msgs{height:300px;overflow:auto;display:flex;flex-direction:column;gap:6px;padding:8px 0}
+.bu{max-width:80%;padding:8px 12px;border-radius:14px;background:var(--b)}.bu.me{align-self:flex-end;background:var(--a);color:#fff}
+.send{display:flex;gap:8px}.send input{margin:0}
+#toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:99px;z-index:99;opacity:0;pointer-events:none;transition:.3s}#toast.on{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" data-act="go" data-v="home">MAVRO</div>
+  <input id="q" placeholder="Mahsulotlarni qidirish..">
+  <button class="ib" data-act="go" data-v="fav" aria-label="Sevimlilar">♡</button>
+  <button class="ib" data-act="theme" aria-label="Rejim">☾</button>
+</header>
+<main id="app"></main>
+<nav>
+  <button data-v="home" data-act="go"><b>⌂</b>Bosh sahifa</button>
+  <button data-v="shop" data-act="go"><b>▦</b>Do'kon</button>
+  <button data-v="post" data-act="go"><b>＋</b>E'lon</button>
+  <button data-v="cats" data-act="go"><b>◫</b>Kategoriyalar</button>
+  <button data-v="profile" data-act="go"><b><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></b>Profil</button>
+</nav>
+<div id="m"></div><div id="toast"></div>
+
+<script type="module">
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import {getFirestore,collection,doc,setDoc,deleteDoc,updateDoc,arrayUnion,onSnapshot,query,where} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import {getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut,onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+/* ===== SOZLAMALAR (shu yerdan o'zgartiring) ===== */
+const CARD='5614682760111254', CARD_OWNER='M SH', FEE=4990;
+const ADMIN='admin'; // admin hisobi Firebase konsolida yaratiladi: admin@mavro.app
+/* ===== FIREBASE: Project settings > Your apps > Web app dagi config'ni shu yerga qo'ying ===== */
+const FB={apiKey:"AIzaSyDmiTg5qB_bLIInKC3YHR7RqngABSzafns",authDomain:"mavro-7c83a.firebaseapp.com",projectId:"mavro-7c83a",storageBucket:"mavro-7c83a.firebasestorage.app",appId:"1:998178808708:android:9ceacdf236e9383e0373d1"};
+const OK=!FB.apiKey.includes('YOUR');
+const CATS=["Aksessuarlar","Chegirmalar","Sweatshirt","Vetrovka","Longsliv","Nimcha","Krosovka","Lofer","Parfum","Polzamok","Shim","Soatlar","Kardigan","Ko'ylak","Dvoyka","Futbolka","Kurtka","Boshqa"];
+const AV="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23cbd5e1' width='40' height='40'/%3E%3Ccircle cx='20' cy='15' r='7' fill='%2394a3b8'/%3E%3Ccircle cx='20' cy='38' r='13' fill='%2394a3b8'/%3E%3C/svg%3E";
+
+/* ===== YORDAMCHILAR ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+const fmt=n=>Number(n).toLocaleString('ru').replace(/\s/g,' ')+" so'm";
+const MEM={listings:[],users:{},chats:[],receipts:{}},SENT={};let ME=null,ready=!OK;
+const app=OK?initializeApp(FB):null,db=OK?getFirestore(app):null,auth=OK?getAuth(app):null;
+const er=e=>{console.error(e);toast('Xatolik: '+(e.code||e.message))};
+const loc=k=>{try{return JSON.parse(localStorage.getItem('mavro_'+k))}catch(e){return null}};
+function push(col,arr,idf,delOK){const ids=new Set();arr.forEach(x=>{const i=idf(x),j=JSON.stringify(x);ids.add(col+i);if(SENT[col+i]!==j){SENT[col+i]=j;setDoc(doc(db,col,i),x).catch(er)}});
+ if(delOK)Object.keys(SENT).forEach(k=>{if(k.startsWith(col)&&!ids.has(k)){delete SENT[k];deleteDoc(doc(db,col,k.slice(col.length))).catch(er)}})}
+const DB={get(k,d){return k in MEM?MEM[k]:(loc(k)??d)},
+ set(k,v){if(k=='listings'){MEM.listings=v;push('listings',v,x=>x.id,1)}
+  else if(k=='chats'){v.forEach(c=>c.p=[c.a,c.b]);MEM.chats=v;push('chats',v,x=>x.id)}
+  else if(k=='users'){MEM.users=v;push('users',Object.values(v),x=>x.phone)}
+  else try{localStorage.setItem('mavro_'+k,JSON.stringify(v))}catch(e){}}};
+const L=()=>MEM.listings,U=()=>MEM.users,me=()=>MEM.users[ME];
+const saveU=u=>{const x=U();x[u.phone]=u;DB.set('users',x)};
+const CH=()=>MEM.chats;
+const pct=l=>l.oldPrice&&l.oldPrice>l.price?Math.round((l.oldPrice-l.price)/l.oldPrice*100):0;
+const key=s=>String(s).trim().toLowerCase().replace(/[\s()+-]/g,'');
+document.documentElement.dataset.theme=DB.get('theme','light');
+let S={v:'home',cat:null,g:null,q:'',reg:false,fav:DB.get('fav',[])},P={imgs:[],shop:'',rec:''},C=null,lastN=-1;
+
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2600)}
+function modal(h){$('#m').innerHTML=`<div class="box"><button class="ib x" data-act="close">✕</button>${h}</div>`;$('#m').classList.add('on')}
+function closeM(){C=null;$('#m').classList.remove('on')}
+const img=(f,m)=>new Promise(r=>{const rd=new FileReader();rd.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,m/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.65))};i.src=rd.result};rd.readAsDataURL(f)});
+const pv=(k,a)=>{const e=$('#pv-'+k);if(e)e.innerHTML=a.filter(Boolean).map(s=>`<img src="${s}">`).join('')};
+
+/* ===== KO'RINISHLAR ===== */
+const approved=()=>L().filter(l=>l.status=='approved');
+function card(l){const p=pct(l);return `<div class="card" data-act="open" data-id="${l.id}"><div class="im"><img loading="lazy" src="${l.imgs[0]}">${p?`<span class="bd">${p}% aksiya</span>`:''}<button class="hb" data-act="fav" data-id="${l.id}">${S.fav.includes(l.id)?'♥':'♡'}</button></div><div class="cb"><small>${esc(l.cat)}${l.g?' · '+GL[l.g]:''}</small><div class="pr">${fmt(l.price)}</div>${p?`<div class="old">${fmt(l.oldPrice)}</div>`:''}<div><b>${esc(l.title)}</b></div><div class="left">${l.stock} dona qoldi</div></div></div>`}
+const grid=a=>a.length?`<div class="grid">${a.map(card).join('')}</div>`:`<p class="empty">Hozircha e'lonlar yo'q. Birinchi bo'lib e'lon joylang!</p>`;
+const GL={man:'Man',lady:'Lady'};
+const gtabs=()=>`<div class="chips" style="margin-bottom:10px">${[['','Hammasi'],['man','Man'],['lady','Lady']].map(([g,t])=>`<button class="${(S.g||'')==g?'on':''}" data-act="gen" data-g="${g}">${t}</button>`).join('')}</div>`;
+const home=()=>`<section class="hero"><h1>MAVRO</h1><p>Kiyim-kechak e'lonlari: sotuvchi bilan chat yoki telefon orqali to'g'ridan-to'g'ri gaplashing.</p><button class="btn" data-act="go" data-v="post">E'lon joylash</button></section><div class="tiles" style="margin-bottom:14px"><div class="tile" data-act="gengo" data-g="man"><span>Man</span></div><div class="tile" data-act="gengo" data-g="lady"><span>Lady</span></div></div>${gtabs()}<div class="chips">${CATS.map(c=>`<button data-act="cat" data-c="${esc(c)}">${esc(c)}</button>`).join('')}</div><h2>Yangi e'lonlar</h2>${grid(approved().filter(l=>!S.g||l.g==S.g).reverse().slice(0,24))}`;
+function shop(){const q=S.q.toLowerCase(),a=approved().filter(l=>(!S.cat||l.cat==S.cat)&&(!S.g||l.g==S.g)&&(!q||(l.title+l.cat+l.desc).toLowerCase().includes(q))).reverse();
+ return gtabs()+`<p class="note">${a.length} ta mahsulot${S.cat?` · ${esc(S.cat)} <a href="#" data-act="cat" data-c="">✕ tozalash</a>`:''}</p>${grid(a)}`}
+const cats=()=>`<h2>Kategoriyalar</h2><div class="tiles">${CATS.map(c=>`<div class="tile" data-act="cat" data-c="${esc(c)}"><span>${esc(c)}</span></div>`).join('')}</div>`;
+const fav=()=>`<h2>Sevimlilar</h2>${grid(approved().filter(l=>S.fav.includes(l.id)))}`;
+
+function authView(){return `<div class="note" style="max-width:420px;margin:auto"><h2>${S.reg?"Ro'yxatdan o'ting":'Hisobingizga kiring'}</h2>
+ ${S.reg?'<input id="rn" placeholder="Ismingiz">':''}<input id="lp" placeholder="Telefon raqami"><input id="lw" type="password" placeholder="Parol">
+ <button class="btn w" data-act="${S.reg?'reg':'login'}">${S.reg?"Ro'yxatdan o'tish":'Kirish'}</button>
+ <p style="margin-top:12px">${S.reg?'Hisobingiz bormi?':"Hisobingiz yo'qmi?"} <a href="#" data-act="tab" data-r="${S.reg?0:1}"><b>${S.reg?'Kirish':"Ro'yxatdan o'ting (2 ta bepul e'lon)"}</b></a></p></div>`}
+
+function post(u){if(!u)return authView();const free=u.free>0;
+ return `<h2>E'lon joylash</h2><div class="note">${free?`Sizda <b>${u.free}</b> ta bepul e'lon bor.`:`E'lon joylash narxi: <b>${fmt(FEE)}</b>. Pastda to'lov va chek bo'limi bor.`}</div>
+ <input id="t" placeholder="Mahsulot nomi"><select id="g"><option value="">Kimlar uchun? Man yoki Lady (tanlang)</option><option value="man">Man (erkaklar kiyimi)</option><option value="lady">Lady (ayollar kiyimi)</option></select><select id="c">${CATS.map(c=>`<option>${esc(c)}</option>`).join('')}</select>
+ <input id="p" type="number" placeholder="Narxi (so'm)"><input id="s" type="number" placeholder="Nechta qoldi">
+ <input id="ph" placeholder="Telefon raqamingiz" value="${esc(u.phone==ADMIN?'':u.phone)}"><input id="sh" placeholder="Do'kon nomi"><textarea id="d" rows="3" placeholder="Tavsif"></textarea>
+ <label class="f">Mahsulot rasmlari (3 tagacha)</label><input type="file" accept="image/*" multiple data-f="imgs"><div class="prev" id="pv-imgs"></div>
+ <label class="f">Do'kon rasmi</label><input type="file" accept="image/*" data-f="shop"><div class="prev" id="pv-shop"></div>
+ ${free?'':`<div class="pay"><b>1-qadam:</b> ${fmt(FEE)} ni shu kartaga o'tkazing<div class="cn">${CARD.replace(/(.{4})/g,'$1 ')}</div><div>Karta egasi: <b>${CARD_OWNER}</b></div><button class="btn" style="margin-top:8px" data-act="copy">Karta raqamini nusxalash</button></div>
+ <label class="f"><b>2-qadam:</b> To'lov chekining rasmini yuklang</label><input type="file" accept="image/*" data-f="rec"><div class="prev" id="pv-rec"></div>`}
+ <button class="btn w" data-act="submit">E'lonni yuborish</button>`}
+
+function myRow(l){const p=pct(l),s={approved:'Joylangan',pending:'Admin tekshirmoqda',rejected:'Rad etilgan'}[l.status];
+ return `<div class="my"><img class="th" src="${l.imgs[0]}"><div style="flex:1"><b>${esc(l.title)}</b> ${p?`<span class="st">${p}% aksiya</span>`:''}<br>${fmt(l.price)} <span class="st">${s}</span></div><div class="row"><button class="btn g" data-act="price" data-id="${l.id}">Narx</button><button class="btn r" data-act="del" data-id="${l.id}">✕</button></div></div>`}
+function inbox(u){const c=CH().filter(x=>x.a==u.phone||x.b==u.phone).reverse();
+ return c.map(x=>{const m=x.msgs[x.msgs.length-1];return `<div class="ir" data-act="chat" data-id="${esc(x.id)}"><b>${esc(x.title)}</b><small>${esc(x.a==u.phone?x.b:x.a)}</small><span>${esc(m?m.x:'')}</span></div>`}).join('')||`<p class="empty">Xabarlar yo'q</p>`}
+function profile(u){if(!u)return authView();const my=L().filter(l=>l.owner==u.phone).reverse();
+ return `<div class="pf"><label class="av"><img src="${u.avatar||AV}"><input type="file" accept="image/*" hidden data-f="ava">Rasmni o'zgartirish</label><div><h2 style="margin:0">${esc(u.name)}</h2><small>${esc(u.phone)}</small><br><small>Bepul e'lonlar: ${u.free||0}</small></div></div>
+ <div class="row">${u.admin?`<button class="btn" data-act="go" data-v="admin">Admin bo'limi</button>`:''}<button class="btn g" data-act="support">Yordam xizmati</button><button class="btn g" data-act="theme">Qorong'i/yorug' rejim</button><button class="btn g" data-act="logout">Chiqish</button></div>
+ <h3>Xabarlar</h3>${inbox(u)}<h3>Mening e'lonlarim</h3>${my.map(myRow).join('')||`<p class="empty">E'lon yo'q</p>`}`}
+function admin(u){if(!u)return authView();if(!u.admin)return home();const ls=L(),pend=ls.filter(l=>l.status=='pending').reverse();
+ return `<h2>Admin bo'limi</h2><h3>Tasdiqlash kutayotganlar (${pend.length})</h3>${pend.map(l=>`<div class="ar"><b>${esc(l.title)}</b> — ${fmt(l.price)}<br><small>Sotuvchi: ${esc(l.owner)}</small><br><img class="th" src="${l.imgs[0]}"><br><small>To'lov cheki (${fmt(FEE)}):</small><br><img class="rec" src="${MEM.receipts[l.id]||''}"><div class="row"><button class="btn" data-act="ok" data-id="${l.id}">Tasdiqlash</button><button class="btn r" data-act="no" data-id="${l.id}">Rad etish</button></div></div>`).join('')||`<p class="empty">Kutayotgan e'lon yo'q</p>`}
+ <h3>Yordam va xabarlar</h3>${inbox(u)}<h3>Barcha e'lonlar</h3>${ls.map(l=>`<div class="my"><img class="th" src="${l.imgs[0]}"><div style="flex:1"><b>${esc(l.title)}</b><br><small>${esc(l.owner)} · ${l.status}</small></div><button class="btn r" data-act="del" data-id="${l.id}">✕</button></div>`).join('')}`}
+
+const V={home,shop,cats,fav,post,profile,admin};
+function render(){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v==S.v));$('#app').innerHTML=!OK?`<div class="note"><b>Firebase hali ulanmagan.</b><br>index.html ichidagi <code>FB</code> qismiga o'z Firebase sozlamalaringizni qo'ying.</div>`:!ready?`<p class="empty">Yuklanmoqda...</p>`:(V[S.v]||home)(me())}
+function refresh(f){const a=document.activeElement;if(!f&&(S.v=='post'||(a&&a.closest&&a.closest('#app')&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))))return;render()}
+function go(v){S.v=v;P={imgs:[],shop:'',rec:''};closeM();render();scrollTo(0,0)}
+
+/* ===== E'LON TAFSILOTI ===== */
+function detail(id){const l=L().find(x=>x.id==id);if(!l)return;const o=U()[l.owner]||{},p=pct(l);
+ modal(`<div class="gw">${p?`<span class="bd">${p}% aksiya</span>`:''}<div class="gal">${l.imgs.map(s=>`<img src="${s}">`).join('')}</div></div>
+ <small>${esc(l.cat)}${l.g?' · '+GL[l.g]:''}</small><h3 style="margin:4px 0">${esc(l.title)}</h3><div class="pr">${fmt(l.price)} ${p?`<span class="old">${fmt(l.oldPrice)}</span>`:''}</div><div class="left">${l.stock} dona qoldi</div><p style="margin:8px 0">${esc(l.desc)}</p>
+ <div class="shop"><img src="${l.shopImg||o.avatar||AV}"><div><b>${esc(l.shop||o.name||'Sotuvchi')}</b><br><a href="tel:${esc(l.phone)}">📞 ${esc(l.phone)}</a></div></div>
+ <div class="row"><button class="btn" data-act="startchat" data-id="${l.id}">💬 Chat orqali yozish</button><a class="btn g" style="text-decoration:none" href="tel:${esc(l.phone)}">Qo'ng'iroq</a></div>`)}
+
+/* ===== CHAT ===== */
+function openChat(id){const ch=CH().find(x=>x.id==id);if(!ch)return;C=id;lastN=-1;
+ modal(`<h3>${esc(ch.title)}</h3><div id="msgs"></div><div class="send"><input id="mi" placeholder="Xabar yozing..."><button class="btn" data-act="send">➤</button></div>`);paint();setTimeout(()=>$('#mi')?.focus(),50)}
+function paint(){const ch=CH().find(x=>x.id==C),e=$('#msgs'),u=me();if(!ch||!e||ch.msgs.length==lastN)return;lastN=ch.msgs.length;
+ e.innerHTML=ch.msgs.map(m=>`<div class="bu ${m.f==u.phone?'me':''}">${esc(m.x)}</div>`).join('')||`<p class="empty">Birinchi xabarni yozing</p>`;e.scrollTop=e.scrollHeight}
+function newChat(id,title,a,b){const cs=CH();if(!cs.find(x=>x.id==id)){cs.push({id,title,a,b,msgs:[]});DB.set('chats',cs)}openChat(id)}
+function startChat(lid){const u=me();if(!u){closeM();return go('profile')}const l=L().find(x=>x.id==lid);if(l.owner==u.phone)return toast("Bu sizning e'loningiz");newChat(lid+'_'+u.phone,l.title,u.phone,l.owner)}
+function support(){const u=me();if(!u)return go('profile');newChat('sup_'+u.phone,'Yordam xizmati (admin)',u.phone,ADMIN)}
+function send(){const t=$('#mi').value.trim();if(!t)return;const ch=CH().find(x=>x.id==C),m={f:me().phone,x:t,t:Date.now()};ch.msgs.push(m);SENT['chats'+C]=JSON.stringify(ch);updateDoc(doc(db,'chats',C),{msgs:arrayUnion(m)}).catch(er);$('#mi').value='';paint()}
+
+/* ===== AMALLAR ===== */
+function submit(){const u=me(),g=i=>$('#'+i).value.trim(),t=g('t'),p=+g('p');
+ if(!t||!p||!g('ph')||!P.imgs.length)return toast('Nom, narx, telefon va kamida 1 rasm kerak');
+ if(!g('g'))return toast('Kiyim Man yoki Lady ekanini tanlang');const free=u.free>0;if(!free&&!P.rec)return toast('Avval to\'lov chekining rasmini yuklang');
+ const ls=L();const id=Date.now().toString(36);if(!free)setDoc(doc(db,'receipts',id),{owner:u.phone,img:P.rec}).catch(er);ls.push({id,owner:u.phone,title:t,cat:g('c'),g:g('g'),price:p,oldPrice:null,stock:g('s')||1,phone:g('ph'),shop:g('sh'),desc:g('d'),imgs:P.imgs,shopImg:P.shop,status:free?'approved':'pending',t:Date.now()});
+ DB.set('listings',ls);if(free){u.free--;saveU(u)}go('profile');
+ modal(free?`<h3>✅ E'loningiz joylandi</h3><p>Bepul e'lonlaringiz qoldi: ${u.free}</p><button class="btn w" data-act="close">Yaxshi</button>`
+  :`<h3>✅ E'loningiz tayyor bo'ldi</h3><p style="margin:10px 0">15 daqiqa ichida chekingiz adminlar tomonidan tekshiriladi va tasdiqlangach saytga joylanadi.</p><button class="btn w" data-act="close">Yaxshi</button>`)}
+function setStatus(id,s){const ls=L();ls.find(x=>x.id==id).status=s;DB.set('listings',ls);render()}
+function price(id){const ls=L(),l=ls.find(x=>x.id==id),v=prompt('Yangi narx (so\'m):',l.price);if(v===null)return;const n=+v;if(!n||n<1)return toast("Narx noto'g'ri");
+ if(n<l.price)l.oldPrice=Math.max(l.oldPrice||0,l.price);l.price=n;if(l.oldPrice&&n>=l.oldPrice)l.oldPrice=null;DB.set('listings',ls);render();
+ toast(pct(l)?pct(l)+'% aksiya belgilandi':'Narx yangilandi')}
+function del(id){if(!confirm("E'lon o'chirilsinmi?"))return;DB.set('listings',L().filter(x=>x.id!=id));render()}
+async function login(){const p=key($('#lp').value);try{await signInWithEmailAndPassword(auth,p+'@mavro.app',$('#lw').value)}catch(e){toast("Telefon yoki parol noto'g'ri")}}
+async function reg(){const p=key($('#lp').value),n=$('#rn').value.trim(),w=$('#lw').value;
+ if(!n||!/^[a-z0-9_.]{5,}$/.test(p)||p==ADMIN||w.length<6)return toast("Ism, telefon (kamida 5 belgi, faqat raqam/harf) va kamida 6 belgili parol kiriting");
+ try{await createUserWithEmailAndPassword(auth,p+'@mavro.app',w);saveU({phone:p,name:n,avatar:'',free:2});toast("Xush kelibsiz! 2 ta bepul e'lon sovg'a")}
+ catch(e){toast(e.code=='auth/email-already-in-use'?"Bu raqam ro'yxatdan o'tgan":'Xatolik: '+e.code)}}
+
+const A={go:(e,d)=>go(d.v),close:closeM,open:(e,d)=>detail(d.id),chat:(e,d)=>openChat(d.id),startchat:(e,d)=>startChat(d.id),support,send,submit,login,reg,
+ cat:(e,d)=>{S.cat=d.c||null;go('shop')},gen:(e,d)=>{S.g=d.g||null;render()},gengo:(e,d)=>{S.g=d.g;S.cat=null;go('shop')},tab:(e,d)=>{S.reg=d.r=='1';render()},
+ fav:(e,d)=>{S.fav=S.fav.includes(d.id)?S.fav.filter(x=>x!=d.id):[...S.fav,d.id];DB.set('fav',S.fav);render()},
+ ok:(e,d)=>setStatus(d.id,'approved'),no:(e,d)=>setStatus(d.id,'rejected'),price:(e,d)=>price(d.id),del:(e,d)=>del(d.id),
+ logout:()=>{signOut(auth);S.reg=false;go('home')},
+ theme:()=>{const t=document.documentElement.dataset.theme=='dark'?'light':'dark';document.documentElement.dataset.theme=t;DB.set('theme',t)},
+ copy:()=>{navigator.clipboard?.writeText(CARD);toast('Karta raqami nusxalandi')}};
+document.addEventListener('click',e=>{if(e.target.id=='m')return closeM();const el=e.target.closest('[data-act]');if(!el)return;e.preventDefault();A[el.dataset.act]?.(el,el.dataset)});
+document.addEventListener('keydown',e=>{if(e.key=='Enter'&&e.target.id=='mi')send()});
+document.addEventListener('change',async e=>{const f=e.target.dataset.f;if(!f||!e.target.files.length)return;const fs=[...e.target.files];
+ if(f=='imgs'){P.imgs=await Promise.all(fs.slice(0,3).map(x=>img(x,700)));pv('imgs',P.imgs)}
+ else if(f=='shop'){P.shop=await img(fs[0],500);pv('shop',[P.shop])}
+ else if(f=='rec'){P.rec=await img(fs[0],900);pv('rec',[P.rec])}
+ else if(f=='ava'){const u=me();u.avatar=await img(fs[0],300);saveU(u);render();toast('Profil rasmi yangilandi')}});
+$('#q').addEventListener('input',e=>{S.q=e.target.value;if(S.v!='shop')S.v='shop';render()});
+setInterval(()=>{if(C)paint()},2000);
+addEventListener('storage',()=>{S.fav=DB.get('fav',[]);if(!$('#m').classList.contains('on')&&!['post'].includes(S.v))render();else paint()});
+if(OK){
+ onSnapshot(collection(db,'listings'),s=>{MEM.listings=s.docs.map(d=>{const x=d.data();SENT['listings'+x.id]=JSON.stringify(x);return x});refresh()},er);
+ let un=[];
+ onAuthStateChanged(auth,u=>{un.forEach(f=>f());un=[];ME=u?u.email.split('@')[0]:null;MEM.users={};MEM.chats=[];MEM.receipts={};
+  if(!ME){ready=true;return refresh(true)}
+  ready=false;
+  un.push(onSnapshot(collection(db,'users'),s=>{MEM.users={};s.docs.forEach(d=>{const x=d.data();SENT['users'+d.id]=JSON.stringify(x);MEM.users[d.id]=x});
+   if(ME==ADMIN&&!MEM.users[ADMIN])saveU({phone:ADMIN,name:'Admin',admin:1,free:0,avatar:''});ready=true;refresh(true)},er));
+  un.push(onSnapshot(query(collection(db,'chats'),where('p','array-contains',ME)),s=>{MEM.chats=s.docs.map(d=>{const x=d.data();SENT['chats'+d.id]=JSON.stringify(x);return x});refresh();paint()},er));
+  if(ME==ADMIN)un.push(onSnapshot(collection(db,'receipts'),s=>{MEM.receipts={};s.docs.forEach(d=>MEM.receipts[d.id]=d.data().img);refresh()},er))});
+}
+const hashGo=()=>{if(location.hash=='#admin'){S.v='admin';S.reg=false}render()};
+addEventListener('hashchange',hashGo);
+hashGo();
+</script>
+</body>
+</html>
