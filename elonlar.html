@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAVRO — kiyim-kechak e'lonlari</title>
+<style>
+  :root{--bg:#0b1630;--card:#13224a;--blue:#2f7bff;--text:#fff;--muted:#9fb0d6}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,Arial,sans-serif;background:var(--bg);color:var(--text)}
+  header{padding:18px 16px;text-align:center;border-bottom:1px solid #1f3166}
+  header h1{margin:0;letter-spacing:6px}
+  header p{margin:4px 0 0;color:var(--muted);font-size:14px}
+  main{max-width:1000px;margin:0 auto;padding:16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+  .card{background:var(--card);border-radius:12px;overflow:hidden}
+  .card img{width:100%;height:220px;object-fit:cover;display:block;background:#0b1630}
+  .card div{padding:12px}
+  .card h3{margin:0 0 6px;font-size:16px}
+  .price{color:var(--blue);font-weight:700}
+  .desc{color:var(--muted);font-size:14px;margin:6px 0}
+  a.call{display:inline-block;margin-top:6px;padding:8px 12px;background:var(--blue);color:#fff;border-radius:8px;text-decoration:none;font-size:14px}
+  button{cursor:pointer;border:0;border-radius:8px;padding:10px 14px;background:var(--blue);color:#fff;font-size:15px}
+  button.del{background:#c0392b;margin-left:8px;padding:8px 12px}
+  button.ghost{background:transparent;border:1px solid #2a3f7a;color:var(--muted)}
+  input,textarea{width:100%;padding:10px;margin:5px 0;border-radius:8px;border:1px solid #2a3f7a;background:#0b1630;color:#fff;font-size:15px}
+  .panel{background:var(--card);padding:14px;border-radius:12px;margin-bottom:18px}
+  .hidden{display:none}
+  .bar{text-align:right;margin-bottom:10px}
+  #empty{text-align:center;color:var(--muted);padding:40px 0}
+</style>
+</head>
+<body>
+<header>
+  <h1>MAVRO</h1>
+  <p>kiyim-kechak e'lonlari</p>
+</header>
+
+<main>
+  <div class="bar">
+    <button class="ghost" id="adminBtn">Admin</button>
+    <button class="ghost hidden" id="logoutBtn">Chiqish</button>
+  </div>
+
+  <!-- Admin kirish -->
+  <div class="panel hidden" id="loginBox">
+    <input id="email" type="email" placeholder="Admin email">
+    <input id="pass" type="password" placeholder="Parol">
+    <button id="loginBtn">Kirish</button>
+    <span id="loginErr" style="color:#ff7b7b;margin-left:8px"></span>
+  </div>
+
+  <!-- E'lon qo'shish (faqat admin) -->
+  <div class="panel hidden" id="addBox">
+    <h3 style="margin-top:0">E'lon joylash</h3>
+    <input id="title" placeholder="Nomi (masalan: Erkaklar kurtkasi)">
+    <input id="price" placeholder="Narxi (masalan: 250 000 so'm)">
+    <input id="phone" placeholder="Telefon (masalan: +998901234567)">
+    <textarea id="desc" rows="3" placeholder="Tavsif (razmer, rang...)"></textarea>
+    <input id="photo" type="file" accept="image/*">
+    <button id="saveBtn">E'lonni saqlash</button>
+    <span id="saveMsg" style="margin-left:8px;color:var(--muted)"></span>
+  </div>
+
+  <div class="grid" id="list"></div>
+  <div id="empty" class="hidden">Hozircha e'lonlar yo'q</div>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+/* ====== 1) SHU YERGA O'Z FIREBASE SOZLAMALARINGIZNI QO'YING ====== */
+const firebaseConfig = {
+  apiKey: "AIzaSyAoM1vFEy5oPzq0w6we7-JORJK9n5LxTLU",
+  authDomain: "mavro-7c83a.firebaseapp.com",
+  projectId: "mavro-7c83a",
+  storageBucket: "mavro-7c83a.firebasestorage.app",
+  messagingSenderId: "998178808708",
+  appId: "1:998178808708:web:5a91a58c105f674a0373d1"
+};
+/* ================================================================== */
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const col = collection(db, "elonlar");
+
+const $ = id => document.getElementById(id);
+let items = [];
+let isAdmin = false;
+let myUid = null;
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c =>
+  ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+
+// Rasmni kichraytirib (taxminan 700px) matnga aylantiramiz — Firestore'ga sig'adi
+function compress(file, max = 700, quality = 0.7) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onerror = reject;
+    r.onload = () => {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        const k = Math.min(1, max / Math.max(img.width, img.height));
+        const c = document.createElement("canvas");
+        c.width = Math.round(img.width * k);
+        c.height = Math.round(img.height * k);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        resolve(c.toDataURL("image/jpeg", quality));
+      };
+      img.src = r.result;
+    };
+    r.readAsDataURL(file);
+  });
+}
+
+function render() {
+  $("empty").classList.toggle("hidden", items.length > 0);
+  $("list").innerHTML = items.map(it => `
+    <div class="card">
+      ${it.img ? `<img src="${it.img}" alt="">` : ""}
+      <div>
+        <h3>${esc(it.title)}</h3>
+        <div class="price">${esc(it.price)}</div>
+        <div class="desc">${esc(it.desc)}</div>
+        ${it.phone ? `<a class="call" href="tel:${esc(it.phone)}">📞 Qo'ng'iroq</a>` : ""}
+        ${(isAdmin || (myUid && it.uid === myUid)) ? `<button class="del" data-id="${it.id}">O'chirish</button>` : ""}
+      </div>
+    </div>`).join("");
+}
+
+// E'lonlar bazadan jonli o'qiladi — qayta kirsangiz ham turaveradi
+onSnapshot(query(col, orderBy("createdAt", "desc")),
+  snap => { items = snap.docs.map(d => ({ id: d.id, ...d.data() })); render(); },
+  err => console.error("Firestore xato:", err));
+
+// Admin kirish / chiqish
+$("adminBtn").onclick = () => $("loginBox").classList.toggle("hidden");
+$("loginBtn").onclick = async () => {
+  $("loginErr").textContent = "";
+  try { await signInWithEmailAndPassword(auth, $("email").value.trim(), $("pass").value); }
+  catch (e) { $("loginErr").textContent = "Email yoki parol noto'g'ri"; }
+};
+$("logoutBtn").onclick = () => signOut(auth);
+
+// Oddiy mehmonlar ham avtomatik (anonim) kiradi — o'z e'lonini qo'sha va o'chira oladi
+onAuthStateChanged(auth, user => {
+  if (!user) { signInAnonymously(auth).catch(e => console.error(e)); return; }
+  myUid = user.uid;
+  isAdmin = !user.isAnonymous;
+  $("addBox").classList.remove("hidden");
+  $("logoutBtn").classList.toggle("hidden", !isAdmin);
+  $("adminBtn").classList.toggle("hidden", isAdmin);
+  if (isAdmin) $("loginBox").classList.add("hidden");
+  render();
+});
+
+// E'lon saqlash
+$("saveBtn").onclick = async () => {
+  const title = $("title").value.trim();
+  if (!title) { $("saveMsg").textContent = "Nomini yozing"; return; }
+  $("saveMsg").textContent = "Saqlanmoqda...";
+  try {
+    const f = $("photo").files[0];
+    const img = f ? await compress(f) : "";
+    await addDoc(col, {
+      title,
+      price: $("price").value.trim(),
+      phone: $("phone").value.trim(),
+      desc: $("desc").value.trim(),
+      img,
+      uid: myUid,
+      createdAt: serverTimestamp()
+    });
+    ["title","price","phone","desc","photo"].forEach(id => $(id).value = "");
+    $("saveMsg").textContent = "Saqlandi ✅";
+  } catch (e) {
+    console.error(e);
+    $("saveMsg").textContent = "Xato: saqlab bo'lmadi";
+  }
+};
+
+// O'chirish (faqat admin)
+$("list").onclick = async e => {
+  const id = e.target.dataset.id;
+  if (id && confirm("E'lon o'chirilsinmi?")) await deleteDoc(doc(db, "elonlar", id));
+};
+</script>
+</body>
+</html>
